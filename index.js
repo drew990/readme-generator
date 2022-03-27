@@ -1,42 +1,97 @@
+const inquirer = require("inquirer");
+const fs = require("fs");
+const Choices = require("inquirer/lib/objects/choices");
+const UI = require("inquirer/lib/ui/baseui");
+const generateMarkdown = require("./utils/generateMarkdown");
+
 //Making sure index.js is being read by display a message
 console.log("Reading index.js as Node");
 
 // TODO: Include packages needed for this application
+const packagesNeeded = [];
 
 // TODO: Create an array of questions for user input
 const questions = [
-  { name: "Question 1 -", message: "Whats your project title?" },
-  { name: "Question 2 -", message: "Whats going in your table of contents?" },
   {
-    name: "Question 3 -",
-    message:
-      "Any installation needed? If yes, please enter the packages. If no please leave empty",
+    type: "input",
+    name: "inputGitHubUsername",
+    message: "Enter in your GitHub username:",
   },
-  { name: "Question 4 -", message: "What is the usage of the code?" },
   {
-    name: "Question 5 -",
-    message:
-      "Is there a licenses? If yes, enter it in. If no please leave empty",
+    type: "input",
+    name: "inputEmail",
+    message: "Enter in your email address:",
   },
-  { name: "Question 6 -", message: "Who are the contributing authors?" },
+  {
+    type: "input",
+    name: "inputTitle",
+    message: "Enter in your project title:",
+  },
+  {
+    type: "input",
+    name: "inputDescription",
+    message: "Enter in a short description of the project:",
+  },
+  {
+    type: "list",
+    name: "licenses",
+    message: "What kind of licenses should your project have?",
+    choices: ["MIT", "APACHE 2.0", "GPL 3.0", "BSD 3", "None"],
+  },
+  {
+    type: "input",
+    name: "inputInstallation",
+    message: "What command should be run to install dependencies:",
+    validate(input) {
+      if (input.length === 0) {
+        return "An input is needed";
+      } else {
+        return true;
+      }
+    },
+  },
+  {
+    type: "input",
+    name: "inputTest",
+    message: "Command needed to run tests:",
+  },
+  {
+    type: "input",
+    name: "inputRepo",
+    message: "Enter any extra info enter in here about your repo:",
+  },
+  { type: "input", name: "inputContributor", message: "Contributors: " },
 ];
 
 // TODO: Create a function to write README file
-function writeToFile(fileName, data) {}
+// fileName
+function writeToFile(data) {
+  //Passes the data enter into generateMarkdown and will return a README
+  data = generateMarkdown(data);
+
+  try {
+    fs.writeFileSync("./Read.md", data);
+    console.log("Wrote in the file successfully");
+  } catch (err) {
+    console.error(err);
+  }
+}
 
 // TODO: Create a function to initialize app
 function init() {
-  ("use strict");
-  var inquirer = require("inquirer");
-
   //Making sure function init is being read
   console.log("Currently in init");
 
   inquirer.prompt(questions).then((answers) => {
-    console.log("Answer: ", JSON.stringify(answers));
-  });
+    var data = JSON.stringify(answers);
+    data = JSON.parse(data);
 
-  //Will begin to ask questions to the user
+    // console.log(data);
+    // console.log(data.inputTitle);
+
+    //Calls writeToFile
+    writeToFile(data);
+  });
 }
 
 // Function call to initialize app
