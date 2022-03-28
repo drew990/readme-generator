@@ -1,16 +1,12 @@
+// Packages needed for this application
 const inquirer = require("inquirer");
 const fs = require("fs");
-const Choices = require("inquirer/lib/objects/choices");
-const UI = require("inquirer/lib/ui/baseui");
 const generateMarkdown = require("./utils/generateMarkdown");
 
 //Making sure index.js is being read by display a message
 console.log("Reading index.js as Node");
 
-// TODO: Include packages needed for this application
-const packagesNeeded = [];
-
-// TODO: Create an array of questions for user input
+// An array of questions for user input
 const questions = [
   {
     type: "input",
@@ -58,9 +54,13 @@ const questions = [
   {
     type: "input",
     name: "inputRepo",
-    message: "Enter any extra info enter in here about your repo:",
+    message: "What do users need to know about your repo?",
   },
-  { type: "input", name: "inputContributor", message: "Contributors: " },
+  {
+    type: "input",
+    name: "inputCon",
+    message: "What does the user need to know about contributing to the repo?",
+  },
 ];
 
 // TODO: Create a function to write README file
@@ -70,7 +70,7 @@ function writeToFile(data) {
   data = generateMarkdown(data);
 
   try {
-    fs.writeFileSync("./Read.md", data);
+    fs.writeFileSync("./README.md", data);
     console.log("Wrote in the file successfully");
   } catch (err) {
     console.error(err);
@@ -86,10 +86,7 @@ function init() {
     var data = JSON.stringify(answers);
     data = JSON.parse(data);
 
-    // console.log(data);
-    // console.log(data.inputTitle);
-
-    //Calls writeToFile
+    //Calls writeToFile and will generate a README
     writeToFile(data);
   });
 }

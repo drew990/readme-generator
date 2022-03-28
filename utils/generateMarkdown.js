@@ -1,5 +1,4 @@
-// TODO: Create a function that returns a license badge based on which license is passed in
-// If there is no license, return an empty string
+// Returns a license badge based on which license is passed in
 function renderLicenseBadge(license) {
   if (license === "MIT") {
     return "https://img.shields.io/badge/License-MIT-yellow.svg";
@@ -12,8 +11,7 @@ function renderLicenseBadge(license) {
   }
 }
 
-// TODO: Create a function that returns the license link
-// If there is no license, return an empty string
+// Returns the license link
 function renderLicenseLink(license) {
   if (license === "MIT") {
     return "https://opensource.org/licenses/MIT";
@@ -45,11 +43,16 @@ function renderLicenseSection(license) {
 // TODO: Create a function to generate markdown for README
 function generateMarkdown(data) {
   console.log("gen:", data);
-  let badge;
+  let badge,
+    codeFormat = "```";
 
   //Gets licenses data
-  badge = renderLicenseSection(data.licenses);
-
+  if (data.licenses != "None") {
+    badge = renderLicenseSection(data.licenses);
+    licenseLabel = `This Project is licensed under the ${data.licenses} license.`;
+  } else {
+    licenseLabel = "No licenses is use for this code";
+  }
   return `
   # ${data.inputTitle}
 
@@ -72,21 +75,24 @@ function generateMarkdown(data) {
   
   To install necessary dependencies, run the following command:
 
-  ---
+  ${codeFormat}
   ${data.inputInstallation}
-  ---
+  ${codeFormat}
 
   ## Usage
-  ${data.inputDescription}
+  ${data.inputRepo}
 
   ## License
-  This Project is licensed under the ${data.licenses} license.
+  ${licenseLabel}
+
+  ## Contributing
+  ${data.inputCon}
 
   ## Tests
-  To run Tests, run the following command:
-'
+  To run tests, run the following command:
+${codeFormat}
   ${data.inputTest}
-'
+  ${codeFormat}
 
   ## Questions
 
